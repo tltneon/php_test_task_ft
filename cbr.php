@@ -10,16 +10,18 @@
 	$worker = (new Worker())->setLoader($loader);
 	if ($argv[1] === "help") {
 		echo "\n";
-		echo "1. Collect N days. Example: php cbr.php collect *days* *valute*\n";
-		echo "2. Take 1 exact day with rates. Example: php cbr.php *date* *valute1* [*valute2*]";
+		echo "1. Collect N days. Format: php cbr.php collect *days* *valute*\n";
+		echo "Example: php cbr.php collect 20 eur\n";
+		echo "\n";
+		echo "2. Take 1 exact day with rates. Format: php cbr.php *date* *valute1* [*valute2*]\n";
+		echo "Example: php cbr.php 01.01.2022 usd eur\n";
 		echo "\n";
 		exit;
 	}
 	if ($argv[1] === "collect") {
 		$days = $argv[2];
 		$currency = strtoupper($argv[3]);
-		$worker->timeout(1)->requests(10)->days($days)->setFirstCurrency($currency);
-		$result = $worker->work();
+		$result = $worker->timeout(1)->requests(10)->days($days)->setFirstCurrency($currency)->work();
 	} else {
 		$date = date_parse($argv[1]);
 		$date = new DateTime("{$date['day']}-{$date['month']}-{$date['year']}");
